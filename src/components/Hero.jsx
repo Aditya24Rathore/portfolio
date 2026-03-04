@@ -57,7 +57,7 @@ function Hero() {
       <div className="container">
         <div className="hero-content" ref={heroRef}>
           <div className="hero-badge">
-            Available for opportunities
+            👋 Hi, I'm Aditya Rathore
           </div>
           <h1 className="hero-title">
             Software Developer
