@@ -120,23 +120,28 @@ img {
   font-family: var(--font-main);
 }
 
+a.btn-primary,
 .btn-primary {
   background: var(--accent);
   color: #fff;
 }
 
+a.btn-primary:hover,
 .btn-primary:hover {
   background: var(--accent-hover);
+  color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+a.btn-outline,
 .btn-outline {
   background: transparent;
   color: var(--accent);
   border: 2px solid var(--accent);
 }
 
+a.btn-outline:hover,
 .btn-outline:hover {
   background: var(--accent);
   color: #fff;
