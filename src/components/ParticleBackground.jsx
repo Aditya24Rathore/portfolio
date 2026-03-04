@@ -45,8 +45,8 @@ export default function ParticleBackground() {
           { value: 0.15, easing: 'easeInOutQuad', duration: 1200 },
         ],
         backgroundColor: [
-          { value: 'rgba(79,209,197,0.8)', easing: 'easeOutSine', duration: 500 },
-          { value: 'rgba(79,209,197,0.15)', easing: 'easeInOutQuad', duration: 1200 },
+          { value: document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(96,165,250,0.7)' : 'rgba(59,130,246,0.7)', easing: 'easeOutSine', duration: 500 },
+          { value: document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(96,165,250,0.12)' : 'rgba(59,130,246,0.12)', easing: 'easeInOutQuad', duration: 1200 },
         ],
         delay: anime.stagger(50, {
           grid: [COLS, ROWS],

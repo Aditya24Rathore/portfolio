@@ -37,8 +37,8 @@ export default function StaggerGrid({ id = 'stagger', rows = 10, cols = 20 }) {
           { value: '2px', easing: 'easeInOutQuad', duration: 1200 },
         ],
         backgroundColor: [
-          { value: '#5eead4', easing: 'easeOutSine', duration: 500 },
-          { value: 'rgba(79,209,197,0.12)', easing: 'easeInOutQuad', duration: 1200 },
+          { value: document.documentElement.getAttribute('data-theme') === 'dark' ? '#A78BFA' : '#6366F1', easing: 'easeOutSine', duration: 500 },
+          { value: document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(167,139,250,0.12)' : 'rgba(99,102,241,0.12)', easing: 'easeInOutQuad', duration: 1200 },
         ],
         delay: anime.stagger(30, {
           grid: [cols, rows],
