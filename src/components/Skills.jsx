@@ -1,4 +1,9 @@
+import useScrollReveal from '../hooks/useScrollReveal'
+
 function Skills() {
+  const titleRef = useScrollReveal()
+  const gridRef = useScrollReveal({ animation: 'scaleIn', stagger: true })
+
   const skillCategories = [
     {
       icon: '💻',
@@ -25,11 +30,13 @@ function Skills() {
   return (
     <section className="section" id="skills">
       <div className="container">
-        <h2 className="section-title">Skills</h2>
-        <p className="section-subtitle">
-          Technologies and topics I work with regularly.
-        </p>
-        <div className="skills-grid">
+        <div ref={titleRef}>
+          <h2 className="section-title">Skills</h2>
+          <p className="section-subtitle">
+            Technologies and topics I work with regularly.
+          </p>
+        </div>
+        <div className="skills-grid" ref={gridRef}>
           {skillCategories.map((category, i) => (
             <div className="skill-card" key={i}>
               <div className="skill-card-icon">{category.icon}</div>

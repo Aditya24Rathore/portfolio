@@ -8,6 +8,7 @@ import SortingVisualizer from './components/SortingVisualizer'
 import Certifications from './components/Certifications'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import ScrollProgress from './components/ScrollProgress'
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -25,6 +26,7 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />

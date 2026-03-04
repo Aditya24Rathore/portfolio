@@ -1,4 +1,10 @@
+import useScrollReveal from '../hooks/useScrollReveal'
+
 function About() {
+  const titleRef = useScrollReveal()
+  const textRef = useScrollReveal({ animation: 'fadeLeft', delay: 100 })
+  const highlightsRef = useScrollReveal({ animation: 'fadeRight', delay: 100, stagger: true })
+
   const highlights = [
     { icon: '💻', text: 'C / C++ (STL, OOPs)' },
     { icon: '🧮', text: 'DSA & Algorithms' },
@@ -11,12 +17,14 @@ function About() {
   return (
     <section className="about section" id="about">
       <div className="container">
-        <h2 className="section-title">About Me</h2>
-        <p className="section-subtitle">
-          A quick overview of who I am and what I do.
-        </p>
+        <div ref={titleRef}>
+          <h2 className="section-title">About Me</h2>
+          <p className="section-subtitle">
+            A quick overview of who I am and what I do.
+          </p>
+        </div>
         <div className="about-grid">
-          <div className="about-text">
+          <div className="about-text" ref={textRef}>
             <p>
               I'm <strong>Aditya Rathore</strong>, a B.Tech Computer Science &amp; Engineering student
               at Takshshila Institute of Engineering &amp; Technology, Jabalpur. My core strengths
@@ -34,7 +42,7 @@ function About() {
             </p>
           </div>
           <div>
-            <div className="about-highlights">
+            <div className="about-highlights" ref={highlightsRef}>
               {highlights.map((item, i) => (
                 <div className="about-highlight-item" key={i}>
                   <span className="icon">{item.icon}</span>

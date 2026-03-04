@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import useScrollReveal from '../hooks/useScrollReveal'
 
 // ===== Sorting Algorithms =====
 const algorithms = {
@@ -208,16 +209,20 @@ function SortingVisualizer() {
 
   const maxVal = Math.max(...array)
   const info = algorithms[algorithm]
+  const titleRef = useScrollReveal({ animation: 'flipX', duration: 1000 })
+  const containerRef = useScrollReveal({ animation: 'scaleIn', delay: 100, duration: 1100 })
 
   return (
     <section className="visualizer section" id="visualizer">
       <div className="container">
-        <h2 className="section-title">DSA Sorting Visualizer</h2>
-        <p className="section-subtitle">
-          Watch sorting algorithms in action. Select an algorithm, adjust speed, and hit Start!
-        </p>
+        <div ref={titleRef}>
+          <h2 className="section-title">DSA Sorting Visualizer</h2>
+          <p className="section-subtitle">
+            Watch sorting algorithms in action. Select an algorithm, adjust speed, and hit Start!
+          </p>
+        </div>
 
-        <div className="visualizer-container">
+        <div className="visualizer-container" ref={containerRef}>
           {/* Controls */}
           <div className="visualizer-controls">
             <select

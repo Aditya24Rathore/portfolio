@@ -1,13 +1,67 @@
+import { useEffect, useRef } from 'react'
+import anime from 'animejs'
+
 function Hero() {
+  const heroRef = useRef(null)
+
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+
+    const badge = el.querySelector('.hero-badge')
+    const title = el.querySelector('.hero-title')
+    const desc = el.querySelector('.hero-description')
+    const buttons = el.querySelectorAll('.hero-buttons .btn')
+    const stats = el.querySelectorAll('.hero-stat')
+
+    const targets = [badge, title, desc, ...buttons, ...stats].filter(Boolean)
+    targets.forEach(t => { t.style.opacity = '0'; t.style.transform = 'translateY(24px)' })
+
+    anime.timeline({ easing: 'easeOutCubic' })
+      .add({
+        targets: badge,
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 600,
+      })
+      .add({
+        targets: title,
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 600,
+      }, '-=400')
+      .add({
+        targets: desc,
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 600,
+      }, '-=400')
+      .add({
+        targets: Array.from(buttons),
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 500,
+        delay: anime.stagger(80),
+      }, '-=400')
+      .add({
+        targets: Array.from(stats),
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 500,
+        delay: anime.stagger(80),
+      }, '-=300')
+  }, [])
+
   return (
     <section className="hero" id="home">
       <div className="container">
-        <div className="hero-content animate-in">
+        <div className="hero-content" ref={heroRef}>
           <div className="hero-badge">
-            👋 Hi, I'm Aditya Rathore
+            Available for opportunities
           </div>
           <h1 className="hero-title">
-            Software Developer<br />
+            Software Developer
+            <br />
             &amp; <span className="highlight">Problem Solver</span>
           </h1>
           <p className="hero-description">

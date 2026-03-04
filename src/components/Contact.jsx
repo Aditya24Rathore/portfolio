@@ -1,6 +1,10 @@
 import { useState } from 'react'
+import useScrollReveal from '../hooks/useScrollReveal'
 
 function Contact() {
+  const titleRef = useScrollReveal()
+  const infoRef = useScrollReveal({ animation: 'fadeLeft', delay: 100 })
+  const formRef = useScrollReveal({ animation: 'fadeRight', delay: 100 })
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
@@ -57,12 +61,14 @@ function Contact() {
   return (
     <section className="contact section" id="contact">
       <div className="container">
-        <h2 className="section-title">Get in Touch</h2>
-        <p className="section-subtitle">
-          Have a question or want to work together? Drop me a message!
-        </p>
+        <div ref={titleRef}>
+          <h2 className="section-title">Get in Touch</h2>
+          <p className="section-subtitle">
+            Have a question or want to work together? Drop me a message!
+          </p>
+        </div>
         <div className="contact-grid">
-          <div className="contact-info">
+          <div className="contact-info" ref={infoRef}>
             <h3>Let's Connect</h3>
             <p>
               I'm always open to discussing new projects, creative ideas, or
@@ -88,7 +94,7 @@ function Contact() {
             </div>
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form className="contact-form" onSubmit={handleSubmit} ref={formRef}>
             <div className="form-group">
               <label htmlFor="name">Name</label>
               <input

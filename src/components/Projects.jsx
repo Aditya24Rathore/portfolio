@@ -1,4 +1,9 @@
+import useScrollReveal from '../hooks/useScrollReveal'
+
 function Projects() {
+  const titleRef = useScrollReveal()
+  const gridRef = useScrollReveal({ stagger: true })
+
   const projects = [
     {
       icon: '🐍',
@@ -32,11 +37,13 @@ function Projects() {
   return (
     <section className="projects section" id="projects">
       <div className="container">
-        <h2 className="section-title">Projects</h2>
-        <p className="section-subtitle">
-          Some of the things I've built to learn and showcase my skills.
-        </p>
-        <div className="projects-grid">
+        <div ref={titleRef}>
+          <h2 className="section-title">Projects</h2>
+          <p className="section-subtitle">
+            Some of the things I've built to learn and showcase my skills.
+          </p>
+        </div>
+        <div className="projects-grid" ref={gridRef}>
           {projects.map((project, i) => (
             <div className="project-card" key={i}>
               <div className="project-card-image">{project.icon}</div>

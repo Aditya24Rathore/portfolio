@@ -1,4 +1,9 @@
+import useScrollReveal from '../hooks/useScrollReveal'
+
 function Certifications() {
+  const titleRef = useScrollReveal()
+  const listRef = useScrollReveal({ animation: 'fadeUp', stagger: true })
+
   const certs = [
     {
       icon: 'C++',
@@ -29,11 +34,13 @@ function Certifications() {
   return (
     <section className="section" id="certifications">
       <div className="container">
-        <h2 className="section-title">Certifications</h2>
-        <p className="section-subtitle">
-          Professional certifications that validate my skills.
-        </p>
-        <div className="certs-grid">
+        <div ref={titleRef}>
+          <h2 className="section-title">Certifications</h2>
+          <p className="section-subtitle">
+            Professional certifications that validate my skills.
+          </p>
+        </div>
+        <div className="certs-grid" ref={listRef}>
           {certs.map((cert, i) => (
             <div className="cert-card" key={i}>
               <span className="cert-icon">{cert.icon}</span>
