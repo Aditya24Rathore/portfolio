@@ -3,7 +3,12 @@ import { useState } from 'react'
 function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
   const [copiedText, setCopiedText] = useState('')
+
+  // Replace with your Web3Forms access key from https://web3forms.com
+  const WEB3FORMS_KEY = 'c8a1c4b4-7b2b-476e-841d-eae7c35a809d'
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
@@ -15,12 +20,38 @@ function Contact() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // In a real app, you'd send this to a backend or service like Formspree
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
-    setFormData({ name: '', email: '', message: '' })
+    setSending(true)
+    setError('')
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: `New message from ${formData.name} via Portfolio`,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitted(true)
+        setFormData({ name: '', email: '', message: '' })
+        setTimeout(() => setSubmitted(false), 3000)
+      } else {
+        setError('Failed to send. Please try again.')
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -93,9 +124,10 @@ function Contact() {
                 required
               ></textarea>
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-              {submitted ? '✓ Sent!' : 'Send Message →'}
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={sending}>
+              {sending ? 'Sending...' : submitted ? '✓ Sent!' : 'Send Message →'}
             </button>
+            {error && <p style={{ color: '#ff4444', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
           </form>
         </div>
       </div>

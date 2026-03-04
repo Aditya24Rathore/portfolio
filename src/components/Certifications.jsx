@@ -1,6 +1,12 @@
 function Certifications() {
   const certs = [
     {
+      icon: 'C++',
+      title: 'C++ Bootcamp by LetsUpgrade',
+      issuer: 'LetsUpgrade',
+      date: 'March 2026',
+    },
+    {
       icon: '🏢',
       title: 'Career Essentials in Software Development',
       issuer: 'LinkedIn Learning & Microsoft',
