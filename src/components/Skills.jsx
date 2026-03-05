@@ -9,7 +9,7 @@ function Skills() {
     {
       icon: '💻',
       title: 'Programming Languages',
-      skills: ['C', 'C++', 'STL', 'OOPs', 'HTML5', 'CSS3', 'JavaScript', 'React.js'],
+      skills: ['C', 'C++', 'STL', 'OOPs'],
     },
     {
       icon: '🛠️',
