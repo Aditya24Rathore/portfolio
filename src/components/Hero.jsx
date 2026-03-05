@@ -1,8 +1,16 @@
 import { useEffect, useRef } from 'react'
 import anime from 'animejs'
+import NeuralNetwork from './NeuralNetwork'
+import ParallaxShapes from './ParallaxShapes'
+import AnimatedBlobs from './AnimatedBlobs'
+import useTypingEffect from '../hooks/useTypingEffect'
 
 function Hero() {
   const heroRef = useRef(null)
+  const { displayed: typedTitle, cursor } = useTypingEffect('Software Developer', {
+    charDelay: 45,
+    startDelay: 800,
+  })
 
   useEffect(() => {
     const el = heroRef.current
@@ -54,13 +62,21 @@ function Hero() {
 
   return (
     <section className="hero" id="home">
+      {/* Neural Network Canvas Background */}
+      <NeuralNetwork />
+      {/* Floating Parallax Shapes */}
+      <ParallaxShapes />
+      {/* Animated Blob Gradients */}
+      <AnimatedBlobs />
+
       <div className="container">
         <div className="hero-content" ref={heroRef}>
           <div className="hero-badge">
             👋 Hi, I'm Aditya Rathore
           </div>
           <h1 className="hero-title">
-            Software Developer
+            <span className="typing-text">{typedTitle}</span>
+            <span className="typing-cursor">{cursor}</span>
             <br />
             &amp; <span className="highlight">Problem Solver</span>
           </h1>
@@ -71,7 +87,8 @@ function Hero() {
           </p>
           <div className="hero-buttons">
             <a href="#projects" className="btn btn-primary">
-              View Projects →
+              <span className="btn-text">View Projects</span>
+              <span className="btn-icon">→</span>
             </a>
             <a href="https://github.com/Aditya24Rathore" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
               GitHub Profile ↗

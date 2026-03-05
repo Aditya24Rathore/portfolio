@@ -14,31 +14,49 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('theme', theme)
   }, [theme])
 
+  useEffect(() => {
+    // Smooth page entrance
+    setLoaded(true)
+  }, [])
+
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'))
   }
 
   return (
-    <>
+    <div className={`app-wrapper ${loaded ? 'app-loaded' : ''}`}>
       <ScrollProgress />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <SortingVisualizer />
-        <Certifications />
-        <Contact />
+        <div className="section-transition">
+          <About />
+        </div>
+        <div className="section-transition">
+          <Skills />
+        </div>
+        <div className="section-transition">
+          <Projects />
+        </div>
+        <div className="section-transition">
+          <SortingVisualizer />
+        </div>
+        <div className="section-transition">
+          <Certifications />
+        </div>
+        <div className="section-transition">
+          <Contact />
+        </div>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }
 

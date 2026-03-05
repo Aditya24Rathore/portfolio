@@ -1067,3 +1067,496 @@ a.btn-outline:hover,
     padding: 0 16px;
   }
 }
+
+/* ================================================================ */
+/* ===== 1. Neural Network Canvas Background ===== */
+/* ================================================================ */
+.neural-network-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ================================================================ */
+/* ===== 4. Typing Text / Character Reveal ===== */
+/* ================================================================ */
+.typing-text {
+  display: inline;
+}
+
+.typing-cursor {
+  display: inline;
+  font-weight: 300;
+  color: var(--accent);
+  animation: cursorBlink 1.06s step-end infinite;
+  margin-left: 2px;
+  font-size: 0.9em;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ================================================================ */
+/* ===== 5. Scroll-Triggered Progress Bars ===== */
+/* ================================================================ */
+.section-progress {
+  margin-bottom: 32px;
+  margin-top: 8px;
+}
+
+.section-progress-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.section-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.section-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.15s linear;
+}
+
+.section-progress-glow {
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: inherit;
+  filter: blur(4px);
+  opacity: 0.8;
+  animation: progressGlowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes progressGlowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* ================================================================ */
+/* ===== 6. Floating Parallax Shapes ===== */
+/* ================================================================ */
+.parallax-shapes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.parallax-shape {
+  position: absolute;
+  will-change: transform;
+}
+
+.shape-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);
+  top: 15%;
+  right: -5%;
+}
+
+[data-theme="dark"] .shape-circle {
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.08), transparent 70%);
+}
+
+.shape-diamond {
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  opacity: 0.06;
+  transform-origin: center;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  top: 30%;
+  left: 8%;
+}
+
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 52px solid var(--accent);
+  opacity: 0.05;
+  top: 60%;
+  right: 12%;
+}
+
+.shape-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  opacity: 0.06;
+  top: 70%;
+  left: 15%;
+}
+
+.shape-plus {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 20%;
+  left: 70%;
+  opacity: 0.06;
+}
+
+.shape-plus::before,
+.shape-plus::after {
+  content: '';
+  position: absolute;
+  background: var(--accent);
+}
+
+.shape-plus::before {
+  width: 100%;
+  height: 4px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.shape-plus::after {
+  width: 4px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.shape-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  opacity: 0.08;
+  top: 45%;
+  right: 25%;
+}
+
+@media (max-width: 768px) {
+  .parallax-shapes-container {
+    display: none;
+  }
+}
+
+/* ================================================================ */
+/* ===== 7. Animated Skill/Tech Stack Icons ===== */
+/* ================================================================ */
+.animated-icon {
+  display: inline-block;
+  animation: iconFloat 3s ease-in-out infinite;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.skill-card:hover .animated-icon {
+  animation: iconBounce 0.6s ease;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes iconBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.25) rotate(10deg); }
+  60% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Stagger delays for each icon */
+.skill-card:nth-child(1) .animated-icon { animation-delay: 0s; }
+.skill-card:nth-child(2) .animated-icon { animation-delay: 0.5s; }
+.skill-card:nth-child(3) .animated-icon { animation-delay: 1s; }
+.skill-card:nth-child(4) .animated-icon { animation-delay: 1.5s; }
+
+/* Glow effect on skill tags when card is hovered */
+.skill-card:hover .skill-tag {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+}
+
+.skill-tag {
+  transition: all 0.25s ease;
+}
+
+/* ================================================================ */
+/* ===== 8. CTA Button Animations ===== */
+/* ================================================================ */
+
+/* Idle shimmer effect on primary buttons */
+.btn-primary {
+  overflow: hidden;
+  position: relative;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: btnShimmer 3s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes btnShimmer {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+/* Arrow slide on hover */
+.btn-primary .btn-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* Ripple effect on click */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+  transition: width 0s, height 0s, opacity 0.5s ease;
+}
+
+/* Subtle pulse on outline buttons when idle */
+.btn-outline {
+  animation: btnOutlinePulse 4s ease-in-out infinite;
+}
+
+.btn-outline:nth-child(2) { animation-delay: 1s; }
+.btn-outline:nth-child(3) { animation-delay: 2s; }
+
+@keyframes btnOutlinePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08); }
+}
+
+[data-theme="dark"] .btn-outline {
+  animation-name: btnOutlinePulseDark;
+}
+
+@keyframes btnOutlinePulseDark {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1); }
+}
+
+/* Contact form submit button success checkmark */
+.btn-success {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+  color: #fff !important;
+}
+
+/* ================================================================ */
+/* ===== 9. Smooth Page/Section Transitions ===== */
+/* ================================================================ */
+.app-wrapper {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.app-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-transition {
+  position: relative;
+}
+
+/* ================================================================ */
+/* ===== 10. Blob/Gradient Shape Animations ===== */
+/* ================================================================ */
+.animated-blobs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  opacity: 0.07;
+  color: var(--accent);
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  top: -15%;
+  right: -10%;
+  color: #3B82F6;
+}
+
+.blob-2 {
+  width: 400px;
+  height: 400px;
+  bottom: -10%;
+  left: -8%;
+  color: #6366F1;
+}
+
+.blob-3 {
+  width: 350px;
+  height: 350px;
+  top: 40%;
+  right: 20%;
+  color: #EC4899;
+  opacity: 0.04;
+}
+
+[data-theme="dark"] .blob-1 { color: #60A5FA; opacity: 0.06; }
+[data-theme="dark"] .blob-2 { color: #A78BFA; opacity: 0.06; }
+[data-theme="dark"] .blob-3 { color: #F472B6; opacity: 0.04; }
+
+/* ================================================================ */
+/* ===== 3. Interactive Hover Cards Depth Enhancement ===== */
+/* ================================================================ */
+.project-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.project-card:hover {
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+}
+
+[data-theme="dark"] .project-card:hover {
+  box-shadow: 0 20px 40px rgba(96, 165, 250, 0.12);
+}
+
+.project-card:hover .project-card-image {
+  transform: scale(1.05);
+}
+
+.project-card-image {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+/* Gradient overlay on hover */
+.project-card-body {
+  position: relative;
+}
+
+.project-card:hover .project-card-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient);
+  border-radius: 0;
+  animation: cardGradientSlide 0.4s ease forwards;
+}
+
+@keyframes cardGradientSlide {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ================================================================ */
+/* ===== Cert & About cards depth on hover ===== */
+/* ================================================================ */
+.cert-card,
+.about-highlight-item {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.cert-card:hover {
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .cert-card:hover {
+  box-shadow: 0 12px 30px rgba(96, 165, 250, 0.08);
+}
+
+@media (max-width: 768px) {
+  .neural-network-canvas {
+    display: none;
+  }
+
+  .animated-blobs {
+    display: none;
+  }
+
+  .blob {
+    display: none;
+  }
+}

@@ -1,4 +1,46 @@
+import { useRef, useEffect } from 'react'
 import useScrollReveal from '../hooks/useScrollReveal'
+import SectionProgress from './SectionProgress'
+
+/** 3D tilt for individual cards */
+function TiltCard({ children, className }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const max = 6
+    const scale = 1.02
+
+    function handleMouseMove(e) {
+      const rect = el.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      const cx = rect.width / 2
+      const cy = rect.height / 2
+      const rx = ((y - cy) / cy) * -max
+      const ry = ((x - cx) / cx) * max
+      el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(${scale},${scale},${scale})`
+    }
+    function handleMouseLeave() {
+      el.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale3d(1,1,1)'
+    }
+
+    el.addEventListener('mousemove', handleMouseMove)
+    el.addEventListener('mouseleave', handleMouseLeave)
+    return () => {
+      el.removeEventListener('mousemove', handleMouseMove)
+      el.removeEventListener('mouseleave', handleMouseLeave)
+    }
+  }, [])
+
+  return (
+    <div className={className} ref={ref} style={{ transformStyle: 'preserve-3d', transition: 'transform 0.4s cubic-bezier(0.03,0.98,0.52,0.99)' }}>
+      {children}
+    </div>
+  )
+}
 
 function Projects() {
   const titleRef = useScrollReveal()
@@ -42,10 +84,11 @@ function Projects() {
           <p className="section-subtitle">
             Some of the things I've built to learn and showcase my skills.
           </p>
+          <SectionProgress label="Projects" />
         </div>
         <div className="projects-grid" ref={gridRef}>
           {projects.map((project, i) => (
-            <div className="project-card" key={i}>
+            <TiltCard className="project-card" key={i}>
               <div className="project-card-image">{project.icon}</div>
               <div className="project-card-body">
                 <h3>{project.title}</h3>
@@ -68,7 +111,7 @@ function Projects() {
                   </a>
                 </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
