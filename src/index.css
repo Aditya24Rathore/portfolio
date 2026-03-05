@@ -639,6 +639,7 @@ a.btn-outline:hover,
 
 .visualizer-controls input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   width: 120px;
   height: 6px;
   background: var(--border);
