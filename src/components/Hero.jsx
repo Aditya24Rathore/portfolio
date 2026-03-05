@@ -7,9 +7,12 @@ import useTypingEffect from '../hooks/useTypingEffect'
 
 function Hero() {
   const heroRef = useRef(null)
-  const { displayed: typedTitle, cursor } = useTypingEffect('Software Developer', {
+  const fullTitle = 'Software Developer\n& Problem Solver'
+  const { displayed: typedTitle, cursor } = useTypingEffect(fullTitle, {
     charDelay: 45,
     startDelay: 800,
+    loop: true,
+    loopPause: 27000,
   })
 
   useEffect(() => {
@@ -75,10 +78,13 @@ function Hero() {
             👋 Hi, I'm Aditya Rathore
           </div>
           <h1 className="hero-title">
-            <span className="typing-text">{typedTitle}</span>
+            {typedTitle.split('\n').map((line, i) => (
+              <span key={i}>
+                {i > 0 && <br />}
+                {i === 1 ? <span className="highlight">{line}</span> : <span className="typing-text">{line}</span>}
+              </span>
+            ))}
             <span className="typing-cursor">{cursor}</span>
-            <br />
-            &amp; <span className="highlight">Problem Solver</span>
           </h1>
           <p className="hero-description">
             B.Tech CSE student passionate about C, C++, Data Structures &amp; Algorithms,
