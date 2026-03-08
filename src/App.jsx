@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
+import LeetCodeCard from './components/LeetCodeCard'
 import Projects from './components/Projects'
 import SortingVisualizer from './components/SortingVisualizer'
 import Certifications from './components/Certifications'
@@ -41,6 +42,9 @@ function App() {
         </div>
         <div className="section-transition">
           <Skills />
+        </div>
+        <div className="section-transition">
+          <LeetCodeCard />
         </div>
         <div className="section-transition">
           <Projects />
