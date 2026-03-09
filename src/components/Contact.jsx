@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import useScrollReveal from '../hooks/useScrollReveal'
 
 function Contact() {
@@ -10,6 +10,15 @@ function Contact() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
   const [copiedText, setCopiedText] = useState('')
+  const copyTimerRef = useRef(null)
+  const submitTimerRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(copyTimerRef.current)
+      clearTimeout(submitTimerRef.current)
+    }
+  }, [])
 
   // Replace with your Web3Forms access key from https://web3forms.com
   const WEB3FORMS_KEY = 'c8a1c4b4-7b2b-476e-841d-eae7c35a809d'
@@ -17,7 +26,8 @@ function Contact() {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
     setCopiedText(text)
-    setTimeout(() => setCopiedText(''), 2000)
+    clearTimeout(copyTimerRef.current)
+    copyTimerRef.current = setTimeout(() => setCopiedText(''), 2000)
   }
 
   const handleChange = e => {
@@ -47,7 +57,8 @@ function Contact() {
       if (result.success) {
         setSubmitted(true)
         setFormData({ name: '', email: '', message: '' })
-        setTimeout(() => setSubmitted(false), 3000)
+        clearTimeout(submitTimerRef.current)
+        submitTimerRef.current = setTimeout(() => setSubmitted(false), 3000)
       } else {
         setError('Failed to send. Please try again.')
       }

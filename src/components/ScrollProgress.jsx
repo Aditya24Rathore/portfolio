@@ -23,7 +23,15 @@ export default function ScrollProgress() {
   return (
     <>
       {/* Progress bar at top */}
-      <div className="scroll-progress-bar" style={{ width: `${progress}%` }} />
+      <div
+        className="scroll-progress-bar"
+        role="progressbar"
+        aria-valuenow={Math.round(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Page scroll progress"
+        style={{ width: `${progress}%` }}
+      />
 
       {/* Floating back-to-top button */}
       <button

@@ -11,23 +11,29 @@ export default function useTypingEffect(text, {
   const [displayed, setDisplayed] = useState('')
   const [cursorVisible, setCursorVisible] = useState(true)
   const [done, setDone] = useState(false)
-  const timeoutRef = useRef(null)
+  const cancelledRef = useRef(false)
 
   useEffect(() => {
     setDisplayed('')
     setDone(false)
+    cancelledRef.current = false
     let i = 0
-    let phase = 'typing' // 'typing' | 'paused' | 'erasing'
+    let activeTimeout = null
+
+    function schedule(fn, delay) {
+      activeTimeout = setTimeout(() => {
+        if (!cancelledRef.current) fn()
+      }, delay)
+    }
 
     function type() {
       if (i < text.length) {
         setDisplayed(text.slice(0, i + 1))
         i++
-        timeoutRef.current = setTimeout(type, charDelay)
+        schedule(type, charDelay)
       } else if (loop) {
-        phase = 'paused'
         setDone(true)
-        timeoutRef.current = setTimeout(erase, loopPause)
+        schedule(erase, loopPause)
       } else {
         setDone(true)
       }
@@ -35,22 +41,24 @@ export default function useTypingEffect(text, {
 
     function erase() {
       setDone(false)
-      phase = 'erasing'
       function step() {
         if (i > 0) {
           i--
           setDisplayed(text.slice(0, i))
-          timeoutRef.current = setTimeout(step, eraseDelay)
+          schedule(step, eraseDelay)
         } else {
-          timeoutRef.current = setTimeout(type, 400)
+          schedule(type, 400)
         }
       }
       step()
     }
 
-    timeoutRef.current = setTimeout(type, startDelay)
+    schedule(type, startDelay)
 
-    return () => clearTimeout(timeoutRef.current)
+    return () => {
+      cancelledRef.current = true
+      clearTimeout(activeTimeout)
+    }
   }, [text, charDelay, startDelay, loop, loopPause, eraseDelay])
 
   // Blinking cursor

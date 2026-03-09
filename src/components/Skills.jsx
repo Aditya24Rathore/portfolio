@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useLayoutEffect, useState, useCallback } from 'react'
 import useScrollReveal from '../hooks/useScrollReveal'
 import SectionProgress from './SectionProgress'
 
@@ -69,32 +69,44 @@ const skillCategories = [
 
 function BeltRow({ category, index }) {
   const trackRef = useRef(null)
-  const [paused, setPaused] = useState(false)
+  const pausedRef = useRef(false)
+  const posRef = useRef(null)
 
   // Triple items for seamless wrap
   const items = [...category.skills, ...category.skills, ...category.skills]
 
-  useEffect(() => {
+  const setPaused = useCallback((val) => { pausedRef.current = val }, [])
+
+  useLayoutEffect(() => {
     const track = trackRef.current
     if (!track) return
     let raf
-    let pos = category.direction === 'left' ? 0 : -track.scrollWidth / 3
-    const speed = category.speed
+
+    function getThird() {
+      return track.scrollWidth / 3
+    }
+
+    // Initialize position only once
+    if (posRef.current === null) {
+      posRef.current = category.direction === 'left' ? 0 : -getThird()
+    }
+
     const dir = category.direction === 'left' ? -1 : 1
-    const third = track.scrollWidth / 3
+    const speed = category.speed
 
     function step() {
-      if (!paused) {
-        pos += dir * (speed / 60)
-        if (category.direction === 'left' && pos <= -third) pos = 0
-        if (category.direction === 'right' && pos >= 0) pos = -third
-        track.style.transform = `translateX(${pos}px)`
+      if (!pausedRef.current) {
+        const third = getThird()
+        posRef.current += dir * (speed / 60)
+        if (category.direction === 'left' && posRef.current <= -third) posRef.current = 0
+        if (category.direction === 'right' && posRef.current >= 0) posRef.current = -third
+        track.style.transform = `translateX(${posRef.current}px)`
       }
       raf = requestAnimationFrame(step)
     }
     raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
-  }, [paused, category.direction, category.speed])
+  }, [category.direction, category.speed])
 
   return (
     <div

@@ -537,6 +537,7 @@ a.btn-outline:hover,
 }
 
 .skills-belt-chip:hover {
+  animation-play-state: paused;
   border-color: var(--belt-color);
   transform: translateY(-7px) scale(1.06);
   box-shadow:

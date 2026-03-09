@@ -17,6 +17,7 @@ export default function NeuralNetwork() {
     const PARTICLE_COUNT = 80
     let mouseX = -1000
     let mouseY = -1000
+    const cascadeTimeouts = []
 
     function resize() {
       const parent = canvas.parentElement
@@ -123,10 +124,11 @@ export default function NeuralNetwork() {
           const dy = p.y - origin.y
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < CONNECTION_DIST * 1.5 && p !== origin) {
-            setTimeout(() => {
+            const tid = setTimeout(() => {
               p.activated = true
               p.activationTime = performance.now()
             }, dist * 3)
+            cascadeTimeouts.push(tid)
           }
         })
       }
@@ -203,6 +205,7 @@ export default function NeuralNetwork() {
 
     return () => {
       cancelAnimationFrame(animId)
+      cascadeTimeouts.forEach(tid => clearTimeout(tid))
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('mousemove', handleMouseMove)
       canvas.removeEventListener('mouseleave', handleMouseLeave)
