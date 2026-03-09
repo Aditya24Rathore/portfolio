@@ -85,6 +85,28 @@
   --nav-bg: rgba(11, 17, 32, 0.82);
 }
 
+/* ===== Theme Transition Animation (View Transitions API) ===== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* Kill per-element transitions while the view-transition circle runs */
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: none !important;
+}
+
 /* ===== Reset & Base ===== */
 *,
 *::before,
@@ -300,6 +322,11 @@ a.btn-outline:hover,
   transform: rotate(15deg) scale(1.05);
   background: var(--accent-light);
   color: var(--accent);
+}
+
+.theme-toggle:active {
+  transform: rotate(360deg) scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-menu-btn {

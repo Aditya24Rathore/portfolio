@@ -18,7 +18,10 @@ function App() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
+    // Only set attribute if not already set (View Transition sets it directly)
+    if (document.documentElement.getAttribute('data-theme') !== theme) {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
     localStorage.setItem('theme', theme)
   }, [theme])
 
@@ -27,8 +30,44 @@ function App() {
     setLoaded(true)
   }, [])
 
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'))
+  const toggleTheme = (e) => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+
+    // Get toggle button position for the expanding circle origin
+    const x = e?.clientX ?? window.innerWidth / 2
+    const y = e?.clientY ?? 40
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    )
+
+    // Use View Transitions API if supported for a smooth clip-path reveal
+    if (document.startViewTransition) {
+      // Disable per-element CSS transitions so only the circle clip animates
+      document.documentElement.classList.add('theme-transitioning')
+
+      const transition = document.startViewTransition(() => {
+        document.documentElement.setAttribute('data-theme', newTheme)
+        setTheme(newTheme)
+      })
+
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          { clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ]},
+          { duration: 600, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+        )
+      })
+
+      transition.finished.then(() => {
+        document.documentElement.classList.remove('theme-transitioning')
+      })
+    } else {
+      // Fallback: just switch instantly
+      setTheme(newTheme)
+    }
   }
 
   return (
