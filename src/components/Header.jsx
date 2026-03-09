@@ -1,7 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Header({ theme, toggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const navLinks = [
     { label: 'Home', href: '#home' },
@@ -14,7 +21,7 @@ function Header({ theme, toggleTheme }) {
   ]
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar${scrolled ? ' navbar-scrolled' : ''}`}>
       <div className="container">
         <a href="#home" className="navbar-logo">
           &lt;<span>Aditya</span>/&gt;

@@ -71,10 +71,11 @@ function App() {
   }
 
   return (
-    <div className={`app-wrapper ${loaded ? 'app-loaded' : ''}`}>
+    <>
       <ScrollProgress />
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <main>
+      <div className={`app-wrapper ${loaded ? 'app-loaded' : ''}`}>
+        <main>
         <Hero />
         <div className="section-transition">
           <About />
@@ -100,6 +101,7 @@ function App() {
       </main>
       <Footer />
     </div>
+    </>
   )
 }
 
