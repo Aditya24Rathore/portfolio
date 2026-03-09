@@ -82,9 +82,9 @@ export default function NeuralNetwork() {
         const dark = isDark()
         const baseAlpha = 0.3 + this.z * 0.4
         const alpha = baseAlpha + this.brightness * 0.6
-        const r = dark ? 96 : 59
-        const g = dark ? 165 : 130
-        const b = dark ? 250 : 246
+        const r = dark ? 129 : 79
+        const g = dark ? 140 : 70
+        const b = dark ? 248 : 229
 
         // Glow when activated
         if (this.brightness > 0.1) {
@@ -137,9 +137,9 @@ export default function NeuralNetwork() {
     // Draw connections
     function drawConnections(ctx, time) {
       const dark = isDark()
-      const r = dark ? 96 : 59
-      const g = dark ? 165 : 130
-      const b = dark ? 250 : 246
+      const r = dark ? 129 : 79
+      const g = dark ? 140 : 70
+      const b = dark ? 248 : 229
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {

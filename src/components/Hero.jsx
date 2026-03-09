@@ -75,7 +75,7 @@ function Hero() {
       <div className="container">
         <div className="hero-content" ref={heroRef}>
           <div className="hero-badge">
-            👋 Hi, I'm Aditya Rathore
+            👋 Hi, I'm <span className="badge-name">Aditya Rathore</span>
           </div>
           <h1 className="hero-title">
             {typedTitle.split('\n').map((line, i) => (
