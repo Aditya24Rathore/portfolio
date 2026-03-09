@@ -448,52 +448,139 @@ a.btn-outline:hover,
   font-size: 1.2rem;
 }
 
-/* ===== Skills ===== */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+/* ===== Skills Belt ===== */
+.skills-belts {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 36px;
+  padding-bottom: 12px;
 }
 
-.skill-card {
+.skills-belt-row {
+  position: relative;
+}
+
+/* ---- Category header with lines ---- */
+.skills-belt-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 0 max(24px, calc((100% - 1100px) / 2));
+}
+
+.skills-belt-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--belt-color), transparent);
+  opacity: 0.3;
+}
+
+.skills-belt-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--belt-color);
+  white-space: nowrap;
+}
+
+/* ---- Belt container ---- */
+.skills-belt {
+  overflow: hidden;
+  width: 100%;
+  padding: 10px 0;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.skills-belt-track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  will-change: transform;
+}
+
+/* ---- Individual chips ---- */
+.skills-belt-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  min-width: 130px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px;
-  transition: all var(--transition);
-  box-shadow: var(--shadow-card);
+  border-radius: 60px;
+  cursor: default;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: chipFloat 3s ease-in-out infinite;
+  overflow: hidden;
 }
 
-.skill-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+/* Subtle per-item float bobbing */
+@keyframes chipFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
 }
 
-.skill-card-icon {
-  font-size: 2rem;
-  margin-bottom: 16px;
+/* Background glow element */
+.skills-belt-chip-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(circle at center, var(--belt-color), transparent 70%);
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
-.skill-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 12px;
+.skills-belt-chip:hover {
+  border-color: var(--belt-color);
+  transform: translateY(-7px) scale(1.06);
+  box-shadow:
+    0 4px 20px color-mix(in srgb, var(--belt-color) 25%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--belt-color) 15%, transparent);
 }
 
-.skill-tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.skills-belt-chip:hover .skills-belt-chip-glow {
+  opacity: 0.08;
 }
 
-.skill-tag {
-  padding: 5px 14px;
-  background: var(--accent-light);
-  color: var(--accent);
-  border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: 500;
+/* Logo images */
+.skills-belt-chip img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
+  transition: transform 0.35s ease;
+}
+
+.skills-belt-chip:hover img {
+  transform: scale(1.18) rotate(6deg);
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--belt-color) 35%, transparent));
+}
+
+/* Emoji fallback for non-logo categories */
+.skills-belt-chip-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Label text */
+.skills-belt-chip-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.skills-belt-chip:hover .skills-belt-chip-name {
+  color: var(--belt-color);
 }
 
 /* ===== Projects ===== */
@@ -1280,9 +1367,6 @@ a.btn-outline:hover,
     grid-template-columns: 1fr;
   }
 
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
 
   .projects-grid {
     grid-template-columns: 1fr;
@@ -1553,40 +1637,7 @@ a.btn-outline:hover,
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.skill-card:hover .animated-icon {
-  animation: iconBounce 0.6s ease;
-  filter: drop-shadow(0 0 8px var(--accent));
-}
 
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-@keyframes iconBounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.25) rotate(10deg); }
-  60% { transform: scale(0.95) rotate(-5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
-
-/* Stagger delays for each icon */
-.skill-card:nth-child(1) .animated-icon { animation-delay: 0s; }
-.skill-card:nth-child(2) .animated-icon { animation-delay: 0.5s; }
-.skill-card:nth-child(3) .animated-icon { animation-delay: 1s; }
-.skill-card:nth-child(4) .animated-icon { animation-delay: 1.5s; }
-
-/* Glow effect on skill tags when card is hovered */
-.skill-card:hover .skill-tag {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
-}
-
-.skill-tag {
-  transition: all 0.25s ease;
-}
 
 /* ================================================================ */
 /* ===== 8. CTA Button Animations ===== */
