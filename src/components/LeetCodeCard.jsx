@@ -93,25 +93,36 @@ function CountUp({ end, duration = 2000, delay = 0 }) {
 
 const USERNAME = 'Aditya_0324'
 const API_BASE = 'https://alfa-leetcode-api.onrender.com'
+const STORAGE_KEY = 'leetcode_stats'
+
+const INITIAL_DEFAULTS = {
+  totalSolved: 57,
+  totalProblems: 3864,
+  easySolved: 55,
+  easyTotal: 930,
+  mediumSolved: 2,
+  mediumTotal: 2021,
+  hardSolved: 0,
+  hardTotal: 913,
+  acceptance: 80,
+  streak: 41,
+  activeDays: 42,
+}
+
+function getSavedStats() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) return { ...INITIAL_DEFAULTS, ...JSON.parse(saved) }
+  } catch { /* ignore */ }
+  return INITIAL_DEFAULTS
+}
 
 function LeetCodeCard() {
   const titleRef = useScrollReveal()
   const cardRef = useScrollReveal({ animation: 'scaleIn', delay: 100 })
   const statsRef = useScrollReveal({ animation: 'fadeUp', delay: 200, stagger: true })
 
-  const [stats, setStats] = useState({
-    totalSolved: 57,
-    totalProblems: 3864,
-    easySolved: 55,
-    easyTotal: 930,
-    mediumSolved: 2,
-    mediumTotal: 2021,
-    hardSolved: 0,
-    hardTotal: 913,
-    acceptance: 80,
-    streak: 41,
-    activeDays: 42,
-  })
+  const [stats, setStats] = useState(getSavedStats)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -160,6 +171,7 @@ function LeetCodeCard() {
           if (cal.totalActiveDays != null) next.activeDays = cal.totalActiveDays
         }
 
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch { /* ignore */ }
         return next
       })
     })
