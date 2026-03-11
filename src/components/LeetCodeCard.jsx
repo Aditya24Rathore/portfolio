@@ -91,19 +91,86 @@ function CountUp({ end, duration = 2000, delay = 0 }) {
   return <span ref={ref}>{count}</span>
 }
 
+const USERNAME = 'Aditya_0324'
+const API_BASE = 'https://alfa-leetcode-api.onrender.com'
+
 function LeetCodeCard() {
   const titleRef = useScrollReveal()
   const cardRef = useScrollReveal({ animation: 'scaleIn', delay: 100 })
   const statsRef = useScrollReveal({ animation: 'fadeUp', delay: 200, stagger: true })
 
-  const totalSolved = 57
-  const totalProblems = 3864
-  const easy = { solved: 55, total: 930, color: '#00b8a3' }
-  const medium = { solved: 2, total: 2021, color: '#ffc01e' }
-  const hard = { solved: 0, total: 913, color: '#ef4743' }
-  const acceptance = 80
-  const streak = 41
-  const activeDays = 42
+  const [stats, setStats] = useState({
+    totalSolved: 57,
+    totalProblems: 3864,
+    easySolved: 55,
+    easyTotal: 930,
+    mediumSolved: 2,
+    mediumTotal: 2021,
+    hardSolved: 0,
+    hardTotal: 913,
+    acceptance: 80,
+    streak: 41,
+    activeDays: 42,
+  })
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const opts = { signal: controller.signal }
+
+    Promise.allSettled([
+      fetch(`${API_BASE}/userProfile/${USERNAME}`, opts).then(r => r.ok ? r.json() : Promise.reject()),
+      fetch(`${API_BASE}/${USERNAME}/calendar`, opts).then(r => r.ok ? r.json() : Promise.reject()),
+    ]).then(([profileRes, calendarRes]) => {
+      setStats((prev) => {
+        const next = { ...prev }
+
+        if (profileRes.status === 'fulfilled') {
+          const profile = profileRes.value
+          const questionsCount = profile.allQuestionsCount || []
+          const easyQ = questionsCount.find(q => q.difficulty === 'Easy')
+          const medQ = questionsCount.find(q => q.difficulty === 'Medium')
+          const hardQ = questionsCount.find(q => q.difficulty === 'Hard')
+
+          if (easyQ) next.easyTotal = easyQ.count
+          if (medQ) next.mediumTotal = medQ.count
+          if (hardQ) next.hardTotal = hardQ.count
+          next.totalProblems = (next.easyTotal + next.mediumTotal + next.hardTotal)
+
+          const acSubs = profile.matchedUser?.submitStats?.acSubmissionNum || []
+          const allSolved = acSubs.find(s => s.difficulty === 'All')
+          const easySolved = acSubs.find(s => s.difficulty === 'Easy')
+          const medSolved = acSubs.find(s => s.difficulty === 'Medium')
+          const hardSolved = acSubs.find(s => s.difficulty === 'Hard')
+
+          if (allSolved) next.totalSolved = allSolved.count
+          if (easySolved) next.easySolved = easySolved.count
+          if (medSolved) next.mediumSolved = medSolved.count
+          if (hardSolved) next.hardSolved = hardSolved.count
+
+          const totalSubs = profile.matchedUser?.submitStats?.totalSubmissionNum || []
+          const allTotal = totalSubs.find(s => s.difficulty === 'All')
+          if (allSolved && allTotal && allTotal.submissions > 0) {
+            next.acceptance = Math.round((allSolved.submissions / allTotal.submissions) * 100)
+          }
+        }
+
+        if (calendarRes.status === 'fulfilled') {
+          const cal = calendarRes.value
+          if (cal.streak != null) next.streak = cal.streak
+          if (cal.totalActiveDays != null) next.activeDays = cal.totalActiveDays
+        }
+
+        return next
+      })
+    })
+
+    return () => controller.abort()
+  }, [])
+
+  const { totalSolved, totalProblems, acceptance, streak, activeDays } = stats
+  const easy = { solved: stats.easySolved, total: stats.easyTotal, color: '#00b8a3' }
+  const medium = { solved: stats.mediumSolved, total: stats.mediumTotal, color: '#ffc01e' }
+  const hard = { solved: stats.hardSolved, total: stats.hardTotal, color: '#ef4743' }
 
   return (
     <section className="section" id="leetcode">
