@@ -92,7 +92,6 @@ function CountUp({ end, duration = 2000, delay = 0 }) {
 }
 
 const USERNAME = 'Aditya_0324'
-const API_BASE = 'https://alfa-leetcode-api.onrender.com'
 const STORAGE_KEY = 'leetcode_stats'
 
 const INITIAL_DEFAULTS = {
@@ -126,55 +125,14 @@ function LeetCodeCard() {
 
   useEffect(() => {
     const controller = new AbortController()
-    const opts = { signal: controller.signal }
 
-    Promise.allSettled([
-      fetch(`${API_BASE}/userProfile/${USERNAME}`, opts).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch(`${API_BASE}/${USERNAME}/calendar`, opts).then(r => r.ok ? r.json() : Promise.reject()),
-    ]).then(([profileRes, calendarRes]) => {
-      setStats((prev) => {
-        const next = { ...prev }
-
-        if (profileRes.status === 'fulfilled') {
-          const profile = profileRes.value
-          const questionsCount = profile.allQuestionsCount || []
-          const easyQ = questionsCount.find(q => q.difficulty === 'Easy')
-          const medQ = questionsCount.find(q => q.difficulty === 'Medium')
-          const hardQ = questionsCount.find(q => q.difficulty === 'Hard')
-
-          if (easyQ) next.easyTotal = easyQ.count
-          if (medQ) next.mediumTotal = medQ.count
-          if (hardQ) next.hardTotal = hardQ.count
-          next.totalProblems = (next.easyTotal + next.mediumTotal + next.hardTotal)
-
-          const acSubs = profile.matchedUser?.submitStats?.acSubmissionNum || []
-          const allSolved = acSubs.find(s => s.difficulty === 'All')
-          const easySolved = acSubs.find(s => s.difficulty === 'Easy')
-          const medSolved = acSubs.find(s => s.difficulty === 'Medium')
-          const hardSolved = acSubs.find(s => s.difficulty === 'Hard')
-
-          if (allSolved) next.totalSolved = allSolved.count
-          if (easySolved) next.easySolved = easySolved.count
-          if (medSolved) next.mediumSolved = medSolved.count
-          if (hardSolved) next.hardSolved = hardSolved.count
-
-          const totalSubs = profile.matchedUser?.submitStats?.totalSubmissionNum || []
-          const allTotal = totalSubs.find(s => s.difficulty === 'All')
-          if (allSolved && allTotal && allTotal.submissions > 0) {
-            next.acceptance = Math.round((allSolved.submissions / allTotal.submissions) * 100)
-          }
-        }
-
-        if (calendarRes.status === 'fulfilled') {
-          const cal = calendarRes.value
-          if (cal.streak != null) next.streak = cal.streak
-          if (cal.totalActiveDays != null) next.activeDays = cal.totalActiveDays
-        }
-
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch { /* ignore */ }
-        return next
+    fetch(`/api/leetcode?username=${USERNAME}`, { signal: controller.signal })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        setStats(data)
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) } catch { /* ignore */ }
       })
-    })
+      .catch(() => { /* keep cached/default stats */ })
 
     return () => controller.abort()
   }, [])
